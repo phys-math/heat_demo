@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>热传递演示</title>
+<style>
+    body {
+        font-family: Arial;
+        text-align: center;
+        background: #f0f0f0;
+    }
+
+    .container {
+        position: relative;
+        width: 600px;
+        height: 400px;
+        margin: 50px auto;
+    }
+
+    /* 烧杯 */
+    .beaker {
+        position: absolute;
+        width: 400px;
+        height: 300px;
+        left: 100px;
+        top: 50px;
+        border: 4px solid #333;
+        border-top: none;
+        border-radius: 0 0 20px 20px;
+        background: rgba(255, 100, 100, 0.2);
+    }
+
+    /* 试管 */
+    .tube {
+        position: absolute;
+        width: 120px;
+        height: 220px;
+        left: 240px;
+        top: 90px;
+        border: 3px solid #333;
+        border-radius: 60px 60px 20px 20px;
+        background: rgba(100, 150, 255, 0.3);
+    }
+
+    /* 小球 */
+    .ball {
+        width: 25px;
+        height: 25px;
+        background: red;
+        border-radius: 50%;
+        position: absolute;
+        cursor: grab;
+    }
+
+</style>
+</head>
+<body>
+
+<h2>热传递演示（拖动红色小球）</h2>
+
+<div class="container" id="container">
+    <div class="beaker"></div>
+    <div class="tube"></div>
+</div>
+
+<script>
+    const container = document.getElementById("container");
+
+    // 创建10个小球
+    for (let i = 0; i < 10; i++) {
+        let ball = document.createElement("div");
+        ball.className = "ball";
+
+        // 初始在烧杯中
+        ball.style.left = (120 + Math.random() * 300) + "px";
+        ball.style.top = (200 + Math.random() * 120) + "px";
+
+        container.appendChild(ball);
+
+        makeDraggable(ball);
+    }
+
+    function makeDraggable(element) {
+        let offsetX, offsetY, isDown = false;
+
+        element.addEventListener("mousedown", (e) => {
+            isDown = true;
+            offsetX = e.offsetX;
+            offsetY = e.offsetY;
+            element.style.cursor = "grabbing";
+        });
+
+        document.addEventListener("mousemove", (e) => {
+            if (!isDown) return;
+
+            const rect = container.getBoundingClientRect();
+
+            element.style.left = (e.clientX - rect.left - offsetX) + "px";
+            element.style.top = (e.clientY - rect.top - offsetY) + "px";
+        });
+
+        document.addEventListener("mouseup", () => {
+            isDown = false;
+            element.style.cursor = "grab";
+        });
+    }
+</script>
+
+</body>
+</html>
